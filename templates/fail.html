@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fail - Demo 2FA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg">
+  <div class="card">
+    <h1 class="title fail">❌ ล้มเหลว</h1>
+    {% if error %}
+      <div class="alert">{{ error }}</div>
+    {% endif %}
+    <p class="small">ลอง login ใหม่อีกครั้ง</p>
+    <a class="link" href="{{ url_for('login') }}">กลับไปหน้า Login</a>
+  </div>
+</body>
+</html>

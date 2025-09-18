@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Success - Demo 2FA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg">
+  <div class="card">
+    <h1 class="title success">🎉 เข้าสู่ระบบสำเร็จ</h1>
+    <p>ยินดีต้อนรับ, <strong>{{ username }}</strong></p>
+    <p class="small">ตอนนี้บัญชีของคุณปลอดภัยมากขึ้นด้วย 2FA (TOTP)</p>
+    <a class="link" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</body>
+</html>

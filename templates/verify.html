@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Verify OTP - Demo 2FA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg">
+  <div class="card">
+    <h1 class="title">ป้อนรหัส OTP</h1>
+    <p>บัญชี: <strong>{{ username }}</strong></p>
+
+    <form method="post" class="form">
+      <label>OTP Code</label>
+      <input name="otp" placeholder="6-digit code" required>
+      <button class="btn" type="submit">Verify</button>
+    </form>
+
+    <p class="small">(ใน demo รหัส OTP จะแสดงใน terminal ของเครื่อง server)</p>
+    <a class="link" href="{{ url_for('logout') }}">Logout / ย้อนกลับ</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - Demo 2FA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg">
+  <div class="card">
+    <h1 class="title">Demo Login</h1>
+    {% if error %}
+      <div class="alert">{{ error }}</div>
+    {% endif %}
+    <form method="post" class="form">
+      <label>Username</label>
+      <input name="username" placeholder="student" required>
+      <label>Password</label>
+      <input name="password" type="password" placeholder="123456" required>
+      <button class="btn" type="submit">Login</button>
+    </form>
+
+    <p class="note">บัญชีตัวอย่าง: <strong>student</strong> / <strong>123456</strong></p>
+    <p class="small">หลัง login ระบบจะสร้าง OTP และแสดงใน terminal (demo)</p>
+  </div>
+</body>
+</html>
