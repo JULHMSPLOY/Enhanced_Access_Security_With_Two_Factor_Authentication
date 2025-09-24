@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/register.css">
+</head>
+<body>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+
+    <div class="register-container">
+        <div class="roblox-logo">
+            <div class="roblox-icon">R</div>
+            <h1>ROBOOD</h1>
+            <p>สร้างบัญชีเพื่อเข้าสู่โลกแห่งการผจญภัย</p>
+        </div>
+
+        <form id="registerForm" method="POST" action="{{ url_for('register') }}">
+            <div class="form-group">
+                <label for="username">ชื่อผู้ใช้</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">อีเมล</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">รหัสผ่าน</label>
+                <input type="password" id="password" name="password" required>
+                <div class="password-strength" id="passwordStrength"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">ยืนยันรหัสผ่าน</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="register-btn" id="registerButton">
+                    สมัครสมาชิก
+                </button>
+            </div>
+        </form>
+
+        <div class="login-link">
+            <p>มีบัญชีอยู่แล้ว? <a href="{{ url_for('login') }}">เข้าสู่ระบบ</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const button = document.getElementById('registerButton');
+            const formData = new FormData(this);
+            
+            // Show loading state
+            button.innerHTML = '<span class="loading"></span>กำลังสมัครสมาชิก...';
+            button.disabled = true;
+            
+            // Create JSON data
+            const data = {
+                username: formData.get('username'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                confirm_password: formData.get('confirm_password')
+            };
+
+            // Basic client-side password match check
+            if (data.password !== data.confirm_password) {
+                showError('รหัสผ่านไม่ตรงกัน');
+                button.innerHTML = 'สมัครสมาชิก';
+                button.disabled = false;
+                return;
+            }
+            
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = '✓ สมัครสำเร็จ!';
+                    button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 1000);
+                } else {
+                    // Show error
+                    showError(data.message);
+                    button.innerHTML = 'สมัครสมาชิก';
+                    button.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                button.innerHTML = 'สมัครสมาชิก';
+                button.disabled = false;
+            });
+        });
+        
+        function showError(message) {
+            // Remove existing error messages
+            const existingErrors = document.querySelectorAll('.error-message');
+            existingErrors.forEach(error => error.remove());
+            
+            // Create new error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            
+            // Insert before form
+            const form = document.getElementById('registerForm');
+            form.parentNode.insertBefore(errorDiv, form);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            
+            if (password.length === 0) {
+                strengthDiv.textContent = '';
+                strengthDiv.className = 'password-strength';
+                return;
+            }
+            
+            let strength = 0;
+            let feedback = [];
+            
+            // Length check
+            if (password.length >= 8) strength++;
+            else feedback.push('อย่างน้อย 8 ตัวอักษร');
+            
+            // Uppercase check
+            if (/[A-Z]/.test(password)) strength++;
+            else feedback.push('ตัวพิมพ์ใหญ่');
+            
+            // Lowercase check
+            if (/[a-z]/.test(password)) strength++;
+            else feedback.push('ตัวพิมพ์เล็ก');
+            
+            // Number check
+            if (/\d/.test(password)) strength++;
+            else feedback.push('ตัวเลข');
+            
+            // Special character check
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            else feedback.push('อักขระพิเศษ');
+            
+            // Display strength
+            if (strength < 2) {
+                strengthDiv.textContent = 'อ่อนแอ - ต้องการ: ' + feedback.join(', ');
+                strengthDiv.className = 'password-strength weak';
+            } else if (strength < 4) {
+                strengthDiv.textContent = 'ปานกลาง - แนะนำ: ' + feedback.join(', ');
+                strengthDiv.className = 'password-strength medium';
+            } else {
+                strengthDiv.textContent = 'แข็งแกร่ง';
+                strengthDiv.className = 'password-strength strong';
+            }
+        });
+
+        // Input animations
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentNode.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentNode.style.transform = 'scale(1)';
+            });
+        });
+
+        // Keyboard shortcut - Enter to submit
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const form = document.getElementById('registerForm');
+                const submitEvent = new Event('submit');
+                form.dispatchEvent(submitEvent);
+            }
+        });
+    </script>
+</body>
+</html>

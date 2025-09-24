@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Dashboard</title>
+    <!-- Google Fonts - Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/dashboard.css">
+</head>
+<body>
+    <!-- Floating shapes from login.html -->
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+
+    <div class="dashboard-container">
+        <div class="roblox-logo">
+            <div class="roblox-icon">R</div>
+            <h1>ROBLOX</h1>
+            <p class="subtitle">Dashboard</p>
+        </div>
+
+        <div class="user-info">
+        {% if user %}
+            <h2>ข้อมูลบัญชี</h2>
+            <p><strong>ชื่อผู้ใช้:</strong> {{ user.username }}</p>
+            <p><strong>อีเมล:</strong> {{ user.email }}</p>
+            <p><strong>เวลาเข้าสู่ระบบล่าสุด:</strong> {{ user.login_time }}</p>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <p>กรุณาเข้าสู่ระบบเพื่อดูข้อมูล</p>
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+    </div>
+</body>
+</html>

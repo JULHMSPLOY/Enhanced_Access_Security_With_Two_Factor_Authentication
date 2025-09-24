@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/login.css">
+</head>
+<body>
+    <!-- Dashboard Button in Top Right Corner -->
+    <a href="{{ url_for('dashboard') }}" class="dashboard-btn">
+        Dashboard
+    </a>
+
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+
+    <div class="login-container">
+        <div class="roblox-logo">
+            <div class="roblox-icon">R</div>
+            <h1>ROBOOD</h1>
+            <p>เข้าสู่โลกแห่งการผจญภัย</p>
+        </div>
+
+        <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="username">ชื่อผู้ใช้หรืออีเมล</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">รหัสผ่าน</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">จดจำการเข้าสู่ระบบ</label>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="login-btn" id="loginButton">
+                    เข้าสู่ระบบ
+                </button>
+            </div>
+        </form>
+
+        <div class="register-link">
+            <p>ยังไม่มีบัญชี? <a href="{{ url_for('register') }}">สมัครสมาชิก</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const button = document.getElementById('loginButton');
+            const formData = new FormData(this);
+            
+            // Show loading state
+            button.innerHTML = '<span class="loading"></span>กำลังเข้าสู่ระบบ...';
+            button.disabled = true;
+            
+            // Create JSON data
+            const data = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                remember: formData.get('remember') === 'on'
+            };
+            
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = '✓ เข้าสู่ระบบสำเร็จ!';
+                    button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 1000);
+                } else {
+                    // Show error
+                    showError(data.message);
+                    button.innerHTML = 'เข้าสู่ระบบ';
+                    button.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                button.innerHTML = 'เข้าสู่ระบบ';
+                button.disabled = false;
+            });
+        });
+        
+        function showError(message) {
+            // Remove existing error messages
+            const existingErrors = document.querySelectorAll('.error-message');
+            existingErrors.forEach(error => error.remove());
+            
+            // Create new error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            
+            // Insert before form
+            const form = document.getElementById('loginForm');
+            form.parentNode.insertBefore(errorDiv, form);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Input animations
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentNode.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentNode.style.transform = 'scale(1)';
+            });
+        });
+
+        // Keyboard shortcut - Enter to submit
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const form = document.getElementById('loginForm');
+                const submitEvent = new Event('submit');
+                form.dispatchEvent(submitEvent);
+            }
+        });
+    </script>
+</body>
+</html>
