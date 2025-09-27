@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Register</title>
+    <title>Robood Register</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/register.css">
 </head>
@@ -12,44 +12,52 @@
     <div class="shape"></div>
     <div class="shape"></div>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <div class="register-container">
-        <div class="roblox-logo">
-            <div class="roblox-icon">R</div>
+        <div class="robood-logo">
+            <div class="robood-icon">R</div>
             <h1>ROBOOD</h1>
-            <p>สร้างบัญชีเพื่อเข้าสู่โลกแห่งการผจญภัย</p>
+            <p>Create an account to enter the world of adventure</p>
         </div>
 
         <form id="registerForm" method="POST" action="{{ url_for('register') }}">
             <div class="form-group">
-                <label for="username">ชื่อผู้ใช้</label>
+                <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
             </div>
             
             <div class="form-group">
-                <label for="email">อีเมล</label>
+                <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-                <label for="password">รหัสผ่าน</label>
+                <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
                 <div class="password-strength" id="passwordStrength"></div>
             </div>
 
             <div class="form-group">
-                <label for="confirm_password">ยืนยันรหัสผ่าน</label>
+                <label for="confirm_password">Confirm Password</label>
                 <input type="password" id="confirm_password" name="confirm_password" required>
             </div>
 
             <div class="button-group">
                 <button type="submit" class="register-btn" id="registerButton">
-                    สมัครสมาชิก
+                    Register
                 </button>
             </div>
         </form>
 
         <div class="login-link">
-            <p>มีบัญชีอยู่แล้ว? <a href="{{ url_for('login') }}">เข้าสู่ระบบ</a></p>
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
         </div>
     </div>
 
@@ -61,7 +69,7 @@
             const formData = new FormData(this);
             
             // Show loading state
-            button.innerHTML = '<span class="loading"></span>กำลังสมัครสมาชิก...';
+            button.innerHTML = '<span class="loading"></span>Registering...';
             button.disabled = true;
             
             // Create JSON data
@@ -74,8 +82,8 @@
 
             // Basic client-side password match check
             if (data.password !== data.confirm_password) {
-                showError('รหัสผ่านไม่ตรงกัน');
-                button.innerHTML = 'สมัครสมาชิก';
+                showError('Passwords do not match');
+                button.innerHTML = 'Register';
                 button.disabled = false;
                 return;
             }
@@ -90,7 +98,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    button.innerHTML = '✓ สมัครสำเร็จ!';
+                    button.innerHTML = 'Registration successful';
                     button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
                     setTimeout(() => {
                         window.location.href = data.redirect;
@@ -98,14 +106,14 @@
                 } else {
                     // Show error
                     showError(data.message);
-                    button.innerHTML = 'สมัครสมาชิก';
+                    button.innerHTML = 'Register';
                     button.disabled = false;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showError('เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                button.innerHTML = 'สมัครสมาชิก';
+                showError('Connection error occurred');
+                button.innerHTML = 'Register';
                 button.disabled = false;
             });
         });
@@ -146,33 +154,33 @@
             
             // Length check
             if (password.length >= 8) strength++;
-            else feedback.push('อย่างน้อย 8 ตัวอักษร');
+            else feedback.push('at least 8 characters');
             
             // Uppercase check
             if (/[A-Z]/.test(password)) strength++;
-            else feedback.push('ตัวพิมพ์ใหญ่');
+            else feedback.push('uppercase letter');
             
             // Lowercase check
             if (/[a-z]/.test(password)) strength++;
-            else feedback.push('ตัวพิมพ์เล็ก');
+            else feedback.push('lowercase letter');
             
             // Number check
             if (/\d/.test(password)) strength++;
-            else feedback.push('ตัวเลข');
+            else feedback.push('number');
             
             // Special character check
             if (/[^A-Za-z0-9]/.test(password)) strength++;
-            else feedback.push('อักขระพิเศษ');
+            else feedback.push('special character');
             
             // Display strength
             if (strength < 2) {
-                strengthDiv.textContent = 'อ่อนแอ - ต้องการ: ' + feedback.join(', ');
+                strengthDiv.textContent = 'Weak - Needs: ' + feedback.join(', ');
                 strengthDiv.className = 'password-strength weak';
             } else if (strength < 4) {
-                strengthDiv.textContent = 'ปานกลาง - แนะนำ: ' + feedback.join(', ');
+                strengthDiv.textContent = 'Medium - Recommended: ' + feedback.join(', ');
                 strengthDiv.className = 'password-strength medium';
             } else {
-                strengthDiv.textContent = 'แข็งแกร่ง';
+                strengthDiv.textContent = 'Strong';
                 strengthDiv.className = 'password-strength strong';
             }
         });

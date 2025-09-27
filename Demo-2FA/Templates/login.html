@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Login</title>
+    <title>Robood Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/login.css">
 </head>
@@ -18,38 +18,51 @@
     <div class="shape"></div>
 
     <div class="login-container">
-        <div class="roblox-logo">
-            <div class="roblox-icon">R</div>
+        <div class="robood-logo">
+            <div class="robood-icon">R</div>
             <h1>ROBOOD</h1>
-            <p>เข้าสู่โลกแห่งการผจญภัย</p>
+            <p>Welcome to the world of adventure</p>
         </div>
+
+        <!-- เพิ่มส่วนสำหรับแสดง Flash Messages ของ Flask -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
         <form id="loginForm" method="POST" action="{{ url_for('login') }}">
             <div class="form-group">
-                <label for="username">ชื่อผู้ใช้หรืออีเมล</label>
+                <label for="username">Username or Email</label>
                 <input type="text" id="username" name="username" required>
             </div>
 
             <div class="form-group">
-                <label for="password">รหัสผ่าน</label>
+                <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
 
             <div class="remember-me">
                 <input type="checkbox" id="remember" name="remember">
-                <label for="remember">จดจำการเข้าสู่ระบบ</label>
+                <label for="remember">Remember me</label>
             </div>
 
             <div class="button-group">
                 <button type="submit" class="login-btn" id="loginButton">
-                    เข้าสู่ระบบ
+                    Login
                 </button>
             </div>
         </form>
 
         <div class="register-link">
-            <p>ยังไม่มีบัญชี? <a href="{{ url_for('register') }}">สมัครสมาชิก</a></p>
+            <p>Don't have an account? <a href="{{ url_for('register') }}">Sign up</a></p>
         </div>
+
+        <a href="{{ url_for('forgot_password') }}" class="forgot-password-link bottom-link">
+            Forgot password?
+        </a>
     </div>
 
     <script>
@@ -60,7 +73,7 @@
             const formData = new FormData(this);
             
             // Show loading state
-            button.innerHTML = '<span class="loading"></span>กำลังเข้าสู่ระบบ...';
+            button.innerHTML = '<span class="loading"></span>Logging in...';
             button.disabled = true;
             
             // Create JSON data
@@ -80,7 +93,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    button.innerHTML = '✓ เข้าสู่ระบบสำเร็จ!';
+                    button.innerHTML = 'Login successful';
                     button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
                     setTimeout(() => {
                         window.location.href = data.redirect;
@@ -88,14 +101,14 @@
                 } else {
                     // Show error
                     showError(data.message);
-                    button.innerHTML = 'เข้าสู่ระบบ';
+                    button.innerHTML = 'Login';
                     button.disabled = false;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showError('เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                button.innerHTML = 'เข้าสู่ระบบ';
+                showError('Connection error occurred');
+                button.innerHTML = 'Login';
                 button.disabled = false;
             });
         });
@@ -138,6 +151,18 @@
                 const submitEvent = new Event('submit');
                 form.dispatchEvent(submitEvent);
             }
+        });
+
+        // ลบ Flash Message ของ Flask หลังจากแสดงผล
+        document.addEventListener('DOMContentLoaded', () => {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(msg => {
+                setTimeout(() => {
+                    msg.style.opacity = '0';
+                    msg.style.transform = 'translateX(-50%) translateY(-20px)';
+                    setTimeout(() => msg.remove(), 500); // รอให้ fade out เสร็จ
+                }, 5000);
+            });
         });
     </script>
 </body>

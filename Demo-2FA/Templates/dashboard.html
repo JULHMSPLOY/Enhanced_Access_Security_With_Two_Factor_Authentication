@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Dashboard</title>
+    <title>Robood Dashboard</title>
     <!-- Google Fonts - Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/dashboard.css">
@@ -14,23 +14,46 @@
     <div class="shape"></div>
     <div class="shape"></div>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <div class="dashboard-container">
-        <div class="roblox-logo">
-            <div class="roblox-icon">R</div>
-            <h1>ROBLOX</h1>
-            <p class="subtitle">Dashboard</p>
+        <div class="robood-logo">
+            <div class="robood-icon">R</div>
+            <h1>ROBOOD</h1>
+            <p class="dashboard-subtitle">Dashboard</p>
         </div>
 
         <div class="user-info">
         {% if user %}
-            <h2>ข้อมูลบัญชี</h2>
-            <p><strong>ชื่อผู้ใช้:</strong> {{ user.username }}</p>
-            <p><strong>อีเมล:</strong> {{ user.email }}</p>
-            <p><strong>เวลาเข้าสู่ระบบล่าสุด:</strong> {{ user.login_time }}</p>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <div class="profile-card">
+                <div class="profile-header">
+                    <img src="https://placehold.co/100x100/A084E8/FFFFFF?text=P" alt="Profile Picture" class="profile-picture">
+                    <div class="profile-details">
+                        <h2 class="username">{{ user.username }}</h2>
+                        <p class="email">{{ user.email }}</p>
+                    </div>
+                </div>
+                <div class="account-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value online">Online</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Last Login:</span>
+                        <span class="detail-value">{{ user.login_time or "ไม่พบข้อมูล" }}</span>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
         {% else %}
-            <p>กรุณาเข้าสู่ระบบเพื่อดูข้อมูล</p>
-            <a href="{{ url_for('login') }}">Login</a>
+            <p>Please log in to view your information</p>
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
         {% endif %}
     </div>
 </body>

@@ -13,6 +13,7 @@ body {
     align-items: center;
     position: relative;
     overflow: hidden;
+    color: #fff;
 }
 
 .shape {
@@ -55,6 +56,27 @@ body {
     50% { transform: translateY(-20px) rotate(180deg); }
 }
 
+/* Flash message styling */
+.flash-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    color: white;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards, fadeOut 0.5s 3s forwards;
+}
+.flash-message.success { background-color: #28a745; }
+.flash-message.error { background-color: #dc3545; }
+.flash-message.info { background-color: #007bff; }
+@keyframes fadeIn { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes fadeOut { from { opacity: 1; transform: translateX(-50%) translateY(0); } to { opacity: 0; transform: translateX(-50%) translateY(-20px); } }
+
 .login-container {
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(20px);
@@ -64,17 +86,24 @@ body {
                 0 0 30px rgba(142, 36, 170, 0.15);
     width: 100%;
     max-width: 400px;
+    text-align: center;
     position: relative;
     z-index: 10;
+    transition: transform 0.3s ease;
     border: 1px solid rgba(156, 39, 176, 0.3);
+    color: #000;
 }
 
-.roblox-logo {
+.login-container:hover {
+    transform: scale(1.02);
+}
+
+.robood-logo {
     text-align: center;
     margin-bottom: 30px;
 }
 
-.roblox-icon {
+.robood-icon {
     width: 60px;
     height: 60px;
     background: linear-gradient(135deg, #6a1b9a, #8e24aa);
@@ -89,16 +118,17 @@ body {
     box-shadow: 0 10px 20px rgba(106, 27, 154, 0.4);
 }
 
-.roblox-logo h1 {
-    color: #2c3e50;
-    font-size: 28px;
+.robood-logo h1 {
+    color: #6a1b9a;
+    font-size: 32px;
     font-weight: 700;
     margin-bottom: 5px;
 }
 
-.roblox-logo p {
+.robood-logo p {
     color: #7f8c8d;
     font-size: 14px;
+    text-align: center;
 }
 
 .form-group {
@@ -112,6 +142,7 @@ body {
     font-weight: 600;
     margin-bottom: 8px;
     font-size: 14px;
+    text-align: left;
 }
 
 .form-group input {
@@ -129,6 +160,23 @@ body {
     border-color: #8e24aa;
     box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.1);
     background: white;
+}
+
+.forgot-password-link {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #8e24aa;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 10px; 
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+    color: #6a1b9a;
 }
 
 .remember-me {
