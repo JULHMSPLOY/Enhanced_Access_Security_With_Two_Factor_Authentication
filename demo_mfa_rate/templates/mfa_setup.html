@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>MFA Setup</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+  <div class="box">
+    <h2>Scan this QR in Google Authenticator</h2>
+    <img src="{{ qr_data }}" alt="QR" style="max-width:100%;border:1px solid #ddd;padding:8px;background:#fff;">
+    <p>If scanner fails, use secret: <code>{{ secret }}</code></p>
+    <form method="post"><button type="submit">Enable MFA & Continue</button></form>
+  </div>
+</body>
+</html>

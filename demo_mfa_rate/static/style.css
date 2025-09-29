@@ -1,0 +1,10 @@
+body { font-family: Arial, sans-serif; background:#eef2f7; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+.box { background:white; padding:24px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.08); width:380px; text-align:center; }
+input { width:100%; padding:10px; margin:8px 0; box-sizing:border-box; }
+button { width:100%; padding:10px; background:#0066ff; color:white; border:none; border-radius:6px; cursor:pointer; }
+.muted { color:#666; font-size:0.9em; }
+.flash.danger { color:#b00020; margin-bottom:8px; }
+.flash.success { color:#0a7a0a; margin-bottom:8px; }
+.small { font-size:0.8em; color:#666; }
+a { color:#0066ff; text-decoration:none; }
+img { max-width:100%; height:auto; border-radius:6px; }
