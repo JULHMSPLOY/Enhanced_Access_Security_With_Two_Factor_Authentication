@@ -2,12 +2,12 @@
 
 ##  This project contains two demo Flask applications that simulate login flows for educational only.
 
-**1) demo_no_mfa: insecure demo (NO MFA, NO rate-limit).**
+**1) demo_no_mfa: insecure demo (NO 2FA, NO rate-limit).**
    - Run: python app.py
    - Demo user: user / 123456789
    - WARNING: plaintext password in-memory. For demo only.
 
-**2) demo_mfa_rate: safer demo (MFA via TOTP + rate-limit).**
+**2) demo_mfa_rate: safer demo (2FA via TOTP + rate-limit).**
    - Requires: pyotp, qrcode, flask-limiter, werkzeug
    - pip install flask pyotp qrcode[pil] flask-limiter werkzeug
    - Run: python app.py
