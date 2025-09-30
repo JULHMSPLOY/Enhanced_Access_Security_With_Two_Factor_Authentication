@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Roblox Demo - {{ demo_type }}</title>
+  <title> Demo - {{ demo_type }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="box">
-    <h1>Roblox Login (Demo)</h1>
+    <h1>Login (Demo)</h1>
     <p class="muted">{{ demo_type }}</p>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -21,7 +21,7 @@
       <input name="password" placeholder="Password" type="password" required>
       <button type="submit">Log In</button>
     </form>
-    <p class="small">For demo: user = <b>roblox_user</b> / pass = <b>password123</b></p>
+    <p class="small">For demo: user = <b>user</b> / pass = <b>123456789</b></p>
   </div>
 </body>
 </html>

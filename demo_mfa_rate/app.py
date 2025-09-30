@@ -19,16 +19,16 @@ limiter.init_app(app)
 
 # demo user store
 USERS = {
-    "roblox_user": {
-        "password_hash": generate_password_hash("password123"),
-        "display": "Lucky Player",
+    "user": {
+        "password_hash": generate_password_hash("123456789"),
+        "display": "user",
         "mfa_secret": None,
         "mfa_enabled": False
     }
 }
 
 def generate_qr_data_uri(secret, username):
-    uri = pyotp.totp.TOTP(secret).provisioning_uri(name=username, issuer_name="Roblox-Demo")
+    uri = pyotp.totp.TOTP(secret).provisioning_uri(name=username, issuer_name="Demo")
     img = qrcode.make(uri)
     buf = io.BytesIO()
     img.save(buf, format='PNG')
@@ -38,7 +38,7 @@ def generate_qr_data_uri(secret, username):
 # ---------------- Routes ----------------
 
 @app.route("/", methods=["GET","POST"])
-@limiter.limit("3 per minute")   # ❗ จำกัด login ผิดได้ไม่เกิน 3 ครั้งต่อนาที
+@limiter.limit("5 per minute")   # ❗ จำกัด login ผิดได้ไม่เกิน 5 ครั้งต่อนาที
 def login():
     if request.method == "POST":
         username = request.form.get("username","").strip()
