@@ -38,7 +38,7 @@ def generate_qr_data_uri(secret, username):
 # ---------------- Routes ----------------
 
 @app.route("/", methods=["GET","POST"])
-@limiter.limit("5 per minute")   # ❗ จำกัด login ผิดได้ไม่เกิน 5 ครั้งต่อนาที
+@limiter.limit("3 per minute")   # จำกัด login ผิดได้ไม่เกิน x ครั้งต่อนาที
 def login():
     if request.method == "POST":
         username = request.form.get("username","").strip()
@@ -73,7 +73,7 @@ def mfa_setup():
         session["username"] = username
         session.pop("pre_mfa_user", None)
         session.pop("temp_secret", None)
-        flash("MFA enabled. You are logged in.", "success")
+        flash("2FA enabled. You are logged in.", "success")
         return redirect(url_for("home"))
 
     # GET: สร้าง secret แล้วเก็บใน session
