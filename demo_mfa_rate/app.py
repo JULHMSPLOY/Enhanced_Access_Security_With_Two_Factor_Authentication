@@ -60,23 +60,30 @@ def mfa_setup():
     if not username:
         return redirect(url_for("login"))
     user = USERS[username]
+
     if request.method == "POST":
-        secret = pyotp.random_base32()
+        # ใช้ secret จาก session ไม่สุ่มใหม่
+        secret = session.get("temp_secret")
+        if not secret:
+            flash("Session lost. Please try again.", "danger")
+            return redirect(url_for("login"))
+
         user["mfa_secret"] = secret
         user["mfa_enabled"] = True
         session["username"] = username
         session.pop("pre_mfa_user", None)
+        session.pop("temp_secret", None)
         flash("MFA enabled. You are logged in.", "success")
         return redirect(url_for("home"))
-    if not user.get("mfa_secret"):
-        temp_secret = pyotp.random_base32()
-    else:
-        temp_secret = user["mfa_secret"]
+
+    # GET: สร้าง secret แล้วเก็บใน session
+    temp_secret = pyotp.random_base32()
+    session["temp_secret"] = temp_secret
     qr = generate_qr_data_uri(temp_secret, username)
     return render_template("mfa_setup.html", qr_data=qr, secret=temp_secret)
 
 @app.route("/mfa_verify", methods=["GET","POST"])
-@limiter.limit("5 per 10 minutes")   # ❗ จำกัดการใส่ OTP ผิด 5 ครั้งใน 10 นาที
+@limiter.limit("5 per 10 minutes")   # จำกัด OTP ผิด 5 ครั้ง/10 นาที
 def mfa_verify():
     username = session.get("pre_mfa_user")
     if not username:
