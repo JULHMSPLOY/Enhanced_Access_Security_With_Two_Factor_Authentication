@@ -38,7 +38,7 @@ def generate_qr_data_uri(secret, username):
 # ---------------- Routes ----------------
 
 @app.route("/", methods=["GET","POST"])
-@limiter.limit("3 per minute")   # จำกัด login ผิดได้ไม่เกิน x ครั้งต่อนาที
+@limiter.limit("5 per minute")   # จำกัด login ไม่เกิน x ครั้งต่อนาที
 def login():
     if request.method == "POST":
         username = request.form.get("username","").strip()
