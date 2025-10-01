@@ -4,7 +4,7 @@ import os
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = os.urandom(24)
 
-# ตัวอย่างฐานข้อมูลผู้ใช้แบบ in-memory (demo เท่านั้น)
+# user
 USERS = {
     "user": {
         "password": "123456789",   #  (plaintext)
