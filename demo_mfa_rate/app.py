@@ -10,14 +10,14 @@ app.secret_key = os.urandom(24)
 # เปิดให้เห็น headers ของ rate-limit เวลา debug
 app.config["RATELIMIT_HEADERS_ENABLED"] = True
 
-# ใช้ syntax สำหรับ Flask-Limiter 3.x
+# syntax สำหรับ Flask-Limiter 3.x
 limiter = Limiter(
     get_remote_address,
     default_limits=["10 per minute", "100 per hour"]
 )
 limiter.init_app(app)
 
-# demo user store
+#user
 USERS = {
     "user": {
         "password_hash": generate_password_hash("123456789"),

@@ -3,3 +3,5 @@ pyotp
 qrcode[pil]
 flask-limiter
 werkzeug
+
+# pip install -r requirements.txt
