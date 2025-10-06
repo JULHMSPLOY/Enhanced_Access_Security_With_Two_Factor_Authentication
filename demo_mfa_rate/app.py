@@ -52,7 +52,7 @@ def login():
                 return redirect(url_for("mfa_setup"))
         else:
             flash("Invalid username or password", "danger")
-    return render_template("login.html", demo_type="MFA + Rate Limit")
+    return render_template("login.html", demo_type="2FA + Rate Limit")
 
 @app.route("/mfa_setup", methods=["GET","POST"])
 def mfa_setup():
@@ -117,7 +117,7 @@ def ratelimit_handler(e):
         "429.html",
         error="Too Many Requests",
         description="กรุณารอซักครู่ก่อนลองใหม่อีกครั้ง",
-        limit=e.description  # จะได้ข้อความจาก limiter ด้วย
+        limit=e.description  
     ), 429
 
 if __name__ == "__main__":

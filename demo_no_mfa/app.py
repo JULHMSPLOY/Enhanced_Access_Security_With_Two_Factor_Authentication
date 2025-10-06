@@ -23,7 +23,7 @@ def login():
             return redirect(url_for("home"))
         else:
             flash("Invalid username or password", "danger")
-    return render_template("login.html", demo_type="No MFA / No Rate Limit")
+    return render_template("login.html", demo_type="No 2FA / No Rate Limit")
 
 @app.route("/home")
 def home():
